@@ -12,7 +12,7 @@ The requirements include:
 
 - a prompt
 - history of previous input
-- launch executables (based on `$PATH` variable, using relative or absolute path)
+- launch executables (based on `PATH` variable, using relative or absolute path)
 - single (`'`) and double (`"`) quotes to prevent the interpretation of meta-characters
 - redirections:
   - input (`<`)
@@ -25,7 +25,7 @@ The requirements include:
 - signal handling (`ctrl`+`C`, `ctrl`+`D`, `ctrl`+`\`)
 - builtins:
   - `echo` with option `-n`
-  - `cd` with relative or absolute path, `-` for `$OLDPWD`, no argument for `$HOME`
+  - `cd` with relative or absolute path, `-` for `OLDPWD`, no argument for `HOME`
   - `pwd` without options
   - `export` without options
   - `unset` without options
@@ -51,7 +51,7 @@ In order to be able to handle groups of commands for the bonus part, we had the 
 For this purpose, we also decided to implement a system of subshells.
 
 As a general rule, we tried to reproduce the bahavior of bash as closely as possible, checking the [bash manual] a lot.
-To facilitate the comparison between our minishell and the original bash, we also built a small tester, which compares the output and the exit status of both shells (see Tester).
+To facilitate the comparison between our minishell and the original bash, we also built a small tester, which compares the output and the exit status of both shells (see Testing).
 
 For debugging purposes, we decided to implement a printing function, which shows the different parsing steps with some syntax highlighting (see Debug Mode).
 
@@ -59,23 +59,59 @@ For debugging purposes, we decided to implement a printing function, which shows
 
 The current version of minishell is developed and tested on macOS, but it should work on all UNIX/LINUX based systems as well.
 
-<b>Requirements:</b>
-- GCC / CLANG Compiler
-- GNU Make
-- GNU Readline library
+Requirements: GCC / CLANG Compiler, GNU Make, GNU Readline Library
 
+Clone this repository:
 ```
-git clone https://github.com/tjensen42/42-minishell.git minishell
+git clone https://github.com/hepple42/42-minishell.git
 ```
+Change to the cloned directory and build the project:
 ```
-cd minishell && make release
+cd 42-minishell && make release
 ```
+Run the minishell:
 ```
 ./minishell
 ```
 
+## Testing
+
+To test our minishell, a small tester is included in this repository.
+It compares most of the shell's features with the current bash installation.
+The output (stdout) and the exit-code are compared directly.
+In test cases which produce an error, the tester only makes sure that both shells print some error output (stderr). 
+
+Run tester:
+```
+make test
+```
+
+## Debug Mode
+
+To visualize the different steps of the lexing and parsing process, we implemented a debug mode.
+It can be activated by exporting an environment variable.
+
+Enter the minishell and export the `DEBUG` environment variable:
+```
+export DEBUG=printer
+```
+
+## Change Prompt
+
+The prompt displayed in the command line of our minishell can be customized by exporting an environment variable.
+
+Enter the minishell and export the `PS1` environment variable:
+```
+export PS1='[prompt]$ '
+```
+
 ## Dependencies
-### Install readline with [brew](https://brew.sh/)
+
+### Install Readline with [Brew]
+
+<details>
+  <summary>How to install readline using brew.</summary>
+  
 ```
 brew install readline
 ```
@@ -84,28 +120,32 @@ brew install readline
 brew link --force readline
 ```
 
-Add the path to the lib
-
-Replace ~/.zshrc with ~/.bashrc if you use bash instead of zsh
 ```
 echo 'export C_INCLUDE_PATH="/usr/local/opt/readline/include:$C_INCLUDE_PATH"' >> ~/.zshrc
 ```
+  
 ```
 echo 'export LIBRARY_PATH="/usr/local/opt/readline/lib:$LIBRARY_PATH"' >> ~/.zshrc
 ```
+  
 ```
 source ~/.zshrc
 ```
+  
+</details>
 
-### Install readline on 42 Macs
+### Install Readline on 42 Macs
 
-Install Brew, <b>only if it is not already installed:</b>
+<details>
+  <summary>How to install readline at 42HN.</summary>
+
+Install brew if it is not already installed:
 
 ```
 rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
 ```
 
-Install Readline library:
+Install readline library:
 ```
 brew install readline
 ```
@@ -124,37 +164,12 @@ echo 'export LIBRARY_PATH="$HOME/.brew/lib:$LIBRARY_PATH"' >> ~/.zshrc
 ```
 source ~/.zshrc
 ```
-
-## Run tests
-
-To check if your minishell build was succesful you can run a tester, which compares most of the features with your current Bash installation. The test compares the stdout and the exit-code directly and checks in case of an error if both print something in stderr. 
-
-```
-make test
-```
-
-## Activate debug mode
-
-Enter minishell and export the DEBUG env:
-
-```
-export DEBUG=printer
-```
-
-For all next commands you will execute in the minishell you will see the different processing steps from the lexer and parser with syntax highlighting.
-
-## Change the command line prompt
-1. Enter the SHELL
-```
-./minishell
-```
-2. Export the PS1 env (also works in Bash and other similar shells)
-```
-export PS1='enter your prompt wish...$ '
-```
-
+  
+</details>
 
 [tjensen42]: https://github.com/tjensen42
 
 [bash manual]: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
+
+[brew]: https://brew.sh/
 
