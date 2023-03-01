@@ -1,49 +1,61 @@
 # 42-minishell
 
-The objective of this project is to create a simple shell, like an own little bash.<br>
-It is the first group project in the 42 core curriculum. <b>([tjensen42](https://github.com/tjensen42) && [hepple42](https://github.com/hepple42))</b>
+This repository contains one of my projects of the core curriculum at [42 Heilbronn], done together with [tjensen42].
 
-## Project specifications
+The project minishell is about creating a simple, bash-like shell.
+As with all C projects at 42 Heilbronn, the code has to be written according to the 42 Norm (maximum 25 lines per function, no for loops, a certain set of allowed functions, ...).
 
-For the project we were allowed to use GNU's readline library which handles the terminal interaction (history & input reading).
-For everything else the subject allows only to use a few low-level functions and a few POSIX system calls.
+## Description
 
-<b>Allowed functions:</b>
-```readline, rl_clear_history, rl_on_new_line,rl_replace_line, rl_redisplay, add_history, printf, malloc, free, write, access, open, read,close, fork, wait, waitpid, wait3, wait4, signal, sigaction, sigemptyset, sigaddset, kill, exit, getcwd, chdir, stat, lstat, fstat, unlink, execve, dup, dup2, pipe, opendir, readdir, closedir, strerror, perror, isatty, ttyname, ttyslot, ioctl, getenv, tcsetattr, tcgetattr, tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs```
+The task in this project is to write a small shell with several features.
+The requirements include:
 
-## Features
+- a prompt
+- history of previous input
+- launch executables (based on `$PATH` variable, using relative or absolute path)
+- single (`'`) and double (`"`) quotes to prevent the interpretation of meta-characters
+- redirections:
+  - input (`<`)
+  - output (`>`)
+  - here document (`<<`)
+  - output append (`>>`)
+- pipes (`|`) to connect commands
+- expand environment variables (`$` followed by a sequence of characters)
+- last exit status (`$?`)
+- signal handling (`ctrl`+`C`, `ctrl`+`D`, `ctrl`+`\`)
+- builtins:
+  - `echo` with option `-n`
+  - `cd` with relative or absolute path, `-` for `$OLDPWD`, no argument for `$HOME`
+  - `pwd` without options
+  - `export` without options
+  - `unset` without options
+  - `env` without options
+  - `exit` with specific exit status
+- wildcards (`*`) in the current working directory _(bonus)_
+- AND (`&&`) and OR (`||`) groups of commands with parentheses for priorities _(bonus)_
 
-### Basics:
-- History of previous entered commands
-- Search and launch the right executable (based on the PATH variable, using a relative or an absolute path)
-- Environment variables ($ followed by a sequence of characters) expand to their values
-- Wildcards * in the current working directory
-- ctrl-C, ctrl-D and ctrl-\ behave like in bash
-- ```’``` (single quotes - prevent from interpreting meta-characters in quoted sequence)
-- ```"``` (double quotes - prevent from interpreting meta-characters in quoted sequence except for $)
-- ```$?``` expands to the last exit status
-- ```|``` connect cmds or groups with pipes; output of a cmd is connected to the input of the next cmd via a pipe
-- ```&&``` and ```||``` with parenthesis for priorities
+The behavior of bash is to be considered as a general reference.
 
-### Builtins:
-- ```echo``` with option -n
-- ```cd``` (relative or absolute path, ```-``` for OLDPWD, without arg for HOME)
-- ```pwd``` without options
-- ```export``` without options
-- ```unset``` without options
-- ```env``` without options
-- ```exit [exit_status]``` without options
+The use of GNU's readline library is allowed for handling terminal interaction (input reading, history).
 
-### Redirections:
+## Approach
 
-```[n]``` (optional) specifies the file descriptor, if not specified it is stdout/stdin
+We decided to split the handling of user input into four basic parts:
 
-- ```[n]< file``` Redirecting Input
-- ```[n]<< limiter``` Here Documents
-- ```[n]> file``` Redirecting Output
-- ```[n]>> file``` Appending Redirected Output
+- lexer: split input into basic tokens, implemented as list elements
+- parser: interpret tokens and rearrange them into sublists
+- expander: expand environment variables and wildcards
+- executer: execute commands
 
-## How to use
+In order to be able to handle groups of commands for the bonus part, we had the parser and the executer work recursively.
+For this purpose, we also decided to implement a system of subshells.
+
+As a general rule, we tried to reproduce the bahavior of bash as closely as possible, checking the [bash manual] a lot.
+To facilitate the comparison between our minishell and the original bash, we also built a small tester, which compares the output and the exit status of both shells (see Tester).
+
+For debugging purposes, we decided to implement a printing function, which shows the different parsing steps with some syntax highlighting (see Debug Mode).
+
+## How to Use
 
 The current version of minishell is developed and tested on macOS, but it should work on all UNIX/LINUX based systems as well.
 
@@ -142,13 +154,7 @@ export PS1='enter your prompt wish...$ '
 ```
 
 
-<br>
-<hr>
-<b>*All 42 projects must be written in C (later C++) in accordance to the 42 School Norm.<br></b>
-<br>
+[tjensen42]: https://github.com/tjensen42
 
-> #### Sample restrictions:
-> - All variables have to be declared and aligned at the top of each function
-> - Each function can not have more then 25 lines
-> - Projects should be created with allowed std functions otherwise it is cheating
+[bash manual]: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
 
