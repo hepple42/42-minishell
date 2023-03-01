@@ -67,7 +67,7 @@ git clone https://github.com/hepple42/42-minishell.git
 ```
 Change to the cloned directory and build the project:
 ```
-cd 42-minishell && make release
+cd 42-minishell && make
 ```
 Run the minishell:
 ```
