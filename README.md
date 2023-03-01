@@ -74,37 +74,6 @@ Run the minishell:
 ./minishell
 ```
 
-## Testing
-
-To test our minishell, a small tester is included in this repository.
-It compares most of the shell's features with the current bash installation.
-The output (stdout) and the exit-code are compared directly.
-In test cases which produce an error, the tester only makes sure that both shells print some error output (stderr). 
-
-Run tester:
-```
-make test
-```
-
-## Debug Mode
-
-To visualize the different steps of the lexing and parsing process, we implemented a debug mode.
-It can be activated by exporting an environment variable.
-
-Enter the minishell and export the `DEBUG` environment variable:
-```
-export DEBUG=printer
-```
-
-## Change Prompt
-
-The prompt displayed in the command line of our minishell can be customized by exporting an environment variable.
-
-Enter the minishell and export the `PS1` environment variable:
-```
-export PS1='[prompt]$ '
-```
-
 ## Dependencies
 
 ### Install Readline with [Brew]
@@ -166,6 +135,37 @@ source ~/.zshrc
 ```
   
 </details>
+
+## Testing
+
+To test our minishell, a small tester is included in this repository.
+It compares most of the shell's features with the current bash installation.
+The output (stdout) and the exit-code are compared directly.
+In test cases which produce an error, the tester only makes sure that both shells print some error output (stderr). 
+
+Run tester:
+```
+make test
+```
+
+## Debug Mode
+
+To visualize the different steps of the lexing and parsing process, we implemented a debug mode.
+It can be activated by exporting an environment variable.
+
+Enter the minishell and export the `DEBUG` environment variable:
+```
+export DEBUG=printer
+```
+
+## Change Prompt
+
+The prompt displayed in the command line of our minishell can be customized by exporting an environment variable.
+
+Enter the minishell and export the `PS1` environment variable:
+```
+export PS1='[prompt]$ '
+```
 
 [tjensen42]: https://github.com/tjensen42
 
