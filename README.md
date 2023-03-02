@@ -167,6 +167,7 @@ Enter the minishell and export the `PS1` environment variable:
 export PS1='[prompt]$ '
 ```
 
+[42 Heilbronn]: https://www.42heilbronn.de/learncoderepeat
 [tjensen42]: https://github.com/tjensen42
 
 [bash manual]: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
